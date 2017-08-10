@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import GoogleLogin from 'react-google-login';
 import logo from '../img/logo.svg';
 import '../styles/App.less';
+
+const responseGoogle = (response) => {
+  console.log(response);
+}
 
 class Login extends Component {
   render() {
@@ -11,7 +16,12 @@ class Login extends Component {
           <h2>Welcome to Login</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          <GoogleLogin
+            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+          />,
         </p>
       </div>
     );

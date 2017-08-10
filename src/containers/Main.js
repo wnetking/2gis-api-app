@@ -1,21 +1,58 @@
-import React, { Component } from 'react';
-import logo from '../img/logo.svg';
-import '../styles/App.less';
+import React, { Component } from 'react'
+import { Map } from '2gis-maps-react'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+export default class Main extends Component {
+    state = {
+        zoom: 13,
+        center: [54.98, 82.89]
+    };
+
+    onChangeZoom = e => {
+        this.setState({
+            zoom: e.target.value
+        });
+    };
+
+    onChangeCenter = e => {
+        this.setState({
+            center: e.target.value.split(',')
+        });
+    };
+
+    onZoomend = e => {
+        this.setState({
+            zoom: e.target.getZoom()
+        });
+    };
+
+    onDrag = e => {
+        this.setState({
+            center: [
+                e.target.getCenter().lat,
+                e.target.getCenter().lng
+            ]
+        });
+    };
+
+    render() {
+        return (
+            <div>
+                <div>
+                    <label>Zoom: </label>
+                    <input onChange={this.onChangeZoom} value={this.state.zoom} style={{width: 30}}/>
+                </div>
+                <div>
+                    <label>Center: </label>
+                    <input onChange={this.onChangeCenter} value={this.state.center} style={{width: 300}}/>
+                </div>
+                <Map
+                    style={{width: "500px", height: "500px"}}
+                    center={this.state.center}
+                    zoom={this.state.zoom}
+                    onZoomend={this.onZoomend}
+                    onDrag={this.onDrag}
+                />
+            </div>
+        );
+    }
 }
-
-export default App;
