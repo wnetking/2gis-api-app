@@ -1,72 +1,76 @@
-import React, {Component} from 'react'
-import {ButtonToolbar, Button} from 'react-bootstrap'
-import {Map, Marker} from '2gis-maps-react'
+import React, { Component } from 'react'
+import { ButtonToolbar, Button } from 'react-bootstrap'
+import { Map, Marker } from '2gis-maps-react'
 
 export default class Markers extends Component {
-  state = {
-    zoom: 12,
-    center: [54.98, 82.89],
-    markers: [],
-    pos: [54.98, 82.89],
-    draggable: false,
-    withPopup: false,
-    popupContent: 'Hello world!'
-  };
-
   onClick = (e) => {
-    this.setState({
-      pos: [e.latlng.lat, e.latlng.lng],
-      center: [e.latlng.lat, e.latlng.lng]
-    });
+    let { dispatch } = this.props;
+    let pos = [e.latlng.lat, e.latlng.lng];
 
-    this.addMarker();
+    dispatch.saveMarkersAction({
+      pos: pos,
+      center: pos
+    })
+
+    this.addMarker(pos);
+  }
+
+  showAll = () => {
+    let { data, dispatch } = this.props;
+
+    dispatch.saveMarkersAction({
+      showAll: !data.showAll
+    })
+  }
+
+
+  addMarker = (pos) => {
+    let { data, dispatch } = this.props;
+
+    dispatch.saveMarkersAction({
+      markers: Array.prototype.concat(data.markers,
+        <Marker key={Math.floor(Math.random() * 10000)} draggable={data.draggable} pos={pos}>
+        </Marker>
+      ),
+    })
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      this.setState({
-        pos: [pos.coords.latitude, pos.coords.longitude],
-        center: [pos.coords.latitude, pos.coords.longitude]
+    let { data, dispatch } = this.props;
+    if (navigator.geolocation.getCurrentPosition((pos) => { }) === undefined) {
+      this.addMarker(data.pos);
+    } else {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        dispatch.saveMarkersAction({
+          pos: [pos.coords.latitude, pos.coords.longitude],
+          center: [pos.coords.latitude, pos.coords.longitude]
+        })
+        this.addMarker();
       });
-
-      this.addMarker();
-    });
+    }
   }
 
 
-  addMarker = () => {
-    let markers = this.state.markers;
-    const pos = this.state.pos;
-    const draggable = this.state.draggable;
-
-    markers.push(
-      <Marker key={this.state.markers.length} draggable={draggable} pos={pos}>
-      </Marker>
-    );
-    this.setState({
-      markers: markers
-    });
-  };
-
-  removeMarker = () => {
-    let markers = this.state.markers;
-    markers.pop();
-    this.setState({
-      markers: markers
-    });
-  };
 
   render() {
+    let { data } = this.props
+    let lastMarker = data.markers[data.markers.length - 1]
     return (
       <div>
-        <Map onClick={this.onClick} style={{width: "100%", height: "700px"}} center={this.state.center} zoom={this.state.zoom}>
-          { this.state.markers }
+        <Map onClick={this.onClick} style={{ width: "100%", height: "400px" }} center={data.center} zoom={data.zoom}>
+          {data.showAll ?
+            data.markers :
+            lastMarker
+          }
         </Map>
         <ButtonToolbar className="mt-3">
-          <Button bsStyle="primary" onClick={this.removeMarker} disabled={!this.state.markers.length}>
-            Show
+          <Button bsStyle="primary" onClick={this.showAll} >
+            {!data.showAll ?
+              'Show all' :
+              'Show last'
+            }
           </Button>
-          <Button>Save</Button>
+          <Button disabled={!data.markers.length}>Save</Button>
         </ButtonToolbar>
       </div>
     );
