@@ -1,58 +1,107 @@
-import React, { Component } from 'react'
-import { Map } from '2gis-maps-react'
+import React, {Component} from 'react'
+import {ButtonToolbar, Button} from 'react-bootstrap'
+import {Map, Marker, Popup} from '2gis-maps-react'
 
-export default class Main extends Component {
-    state = {
-        zoom: 13,
-        center: [54.98, 82.89]
-    };
+export default class Markers extends Component {
+  state = {
+    zoom: 12,
+    center: [54.98, 82.89],
+    markers: [],
+    pos: [54.98, 82.89],
+    draggable: false,
+    withPopup: false,
+    popupContent: 'Hello world!'
+  };
 
-    onChangeZoom = e => {
-        this.setState({
-            zoom: e.target.value
-        });
-    };
+  onClick = (e) => {
+    this.setState({
+      pos: [e.latlng.lat, e.latlng.lng],
+      center: [e.latlng.lat, e.latlng.lng]
+    });
 
-    onChangeCenter = e => {
-        this.setState({
-            center: e.target.value.split(',')
-        });
-    };
+    this.addMarker();
+  }
 
-    onZoomend = e => {
-        this.setState({
-            zoom: e.target.getZoom()
-        });
-    };
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      this.setState({
+        pos: [pos.coords.latitude, pos.coords.longitude],
+        center: [pos.coords.latitude, pos.coords.longitude]
+      });
 
-    onDrag = e => {
-        this.setState({
-            center: [
-                e.target.getCenter().lat,
-                e.target.getCenter().lng
-            ]
-        });
-    };
+      this.addMarker();
+    });
+  }
 
-    render() {
-        return (
-            <div>
-                <div>
-                    <label>Zoom: </label>
-                    <input onChange={this.onChangeZoom} value={this.state.zoom} style={{width: 30}}/>
-                </div>
-                <div>
-                    <label>Center: </label>
-                    <input onChange={this.onChangeCenter} value={this.state.center} style={{width: 300}}/>
-                </div>
-                <Map
-                    style={{width: "500px", height: "500px"}}
-                    center={this.state.center}
-                    zoom={this.state.zoom}
-                    onZoomend={this.onZoomend}
-                    onDrag={this.onDrag}
-                />
-            </div>
-        );
+
+  onChangePos = e => {
+    this.setState({
+      pos: e.target.value.split(',')
+    });
+  };
+
+  onChangeDraggable = () => {
+    this.setState({
+      draggable: !this.state.draggable
+    });
+  };
+
+  onChangeWithPopup = () => {
+    this.setState({
+      withPopup: !this.state.withPopup
+    });
+  };
+
+  onChangePopupContent = e => {
+    this.setState({
+      popupContent: e.target.value
+    });
+  };
+
+  addMarker = () => {
+    let markers = this.state.markers;
+    const pos = this.state.pos;
+    const draggable = this.state.draggable;
+    const popupContent = this.state.popupContent;
+    let popup = null;
+    if (this.state.withPopup) {
+      popup = (
+        <Popup>
+          { popupContent }
+        </Popup>
+      );
     }
+    markers.push(
+      <Marker key={this.state.markers.length} draggable={draggable} pos={pos}>
+        { popup }
+      </Marker>
+    );
+    this.setState({
+      markers: markers
+    });
+  };
+
+  removeMarker = () => {
+    let markers = this.state.markers;
+    markers.pop();
+    this.setState({
+      markers: markers
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <Map onClick={this.onClick} style={{width: "100%", height: "700px"}} center={this.state.center} zoom={this.state.zoom}>
+          { this.state.markers }
+        </Map>
+        <ButtonToolbar className="mt-3">
+          <Button bsStyle="primary" onClick={this.removeMarker} disabled={!this.state.markers.length}>
+            Show
+          </Button>
+          <Button>Save</Button>
+        </ButtonToolbar>
+      </div>
+    );
+  }
 }

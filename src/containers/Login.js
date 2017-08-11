@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import GoogleLogin from 'react-google-login';
-import logo from '../img/logo.svg';
+import {Jumbotron} from 'react-bootstrap'
 import '../styles/App.less';
 
 const responseGoogle = (response) => {
@@ -10,20 +10,16 @@ const responseGoogle = (response) => {
 class Login extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to Login</h2>
-        </div>
-        <p className="App-intro">
-          <GoogleLogin
-            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-          />,
+      <Jumbotron>
+        <h1>Login</h1>
+        <p>Please use you google acount for login. Thank you =)</p>
+        <p>
+          <GoogleLogin clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+            className='btn btn-md btn-default'
+            buttonText="Google Login"
+            onSuccess={responseGoogle} onFailure={responseGoogle}/>
         </p>
-      </div>
+      </Jumbotron>
     );
   }
 }
