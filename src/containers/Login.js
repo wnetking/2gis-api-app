@@ -13,6 +13,7 @@ class Login extends Component {
       <Jumbotron>
         <h1>Login</h1>
         <p>Please use you google acount for login. Thank you =)</p>
+        <hr/>
         <p>
           <GoogleLogin clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
             className='btn btn-md btn-default'

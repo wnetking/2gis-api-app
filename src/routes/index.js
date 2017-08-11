@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import {Grid, Row, Col} from 'react-bootstrap'
+import { connect } from 'react-redux'
 import {Main, Login, About} from '../containers'
 import {Menu} from '../components'
 
@@ -14,6 +15,7 @@ class Routes extends Component {
     return (
       <Router>
         <Grid>
+          { this.props.user }
           <Row className="show-grid">
             <Col xs={12}>
               <Menu />
@@ -30,5 +32,13 @@ class Routes extends Component {
   }
 }
 
+function mapStateToProps (state) {
+  return {
+    map: state.map,
+    auth: state.auth
+  }
+}
 
-export default Routes;
+
+
+export default connect(mapStateToProps)(Routes);

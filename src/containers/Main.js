@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {ButtonToolbar, Button} from 'react-bootstrap'
-import {Map, Marker, Popup} from '2gis-maps-react'
+import {Map, Marker} from '2gis-maps-react'
 
 export default class Markers extends Component {
   state = {
@@ -34,46 +34,13 @@ export default class Markers extends Component {
   }
 
 
-  onChangePos = e => {
-    this.setState({
-      pos: e.target.value.split(',')
-    });
-  };
-
-  onChangeDraggable = () => {
-    this.setState({
-      draggable: !this.state.draggable
-    });
-  };
-
-  onChangeWithPopup = () => {
-    this.setState({
-      withPopup: !this.state.withPopup
-    });
-  };
-
-  onChangePopupContent = e => {
-    this.setState({
-      popupContent: e.target.value
-    });
-  };
-
   addMarker = () => {
     let markers = this.state.markers;
     const pos = this.state.pos;
     const draggable = this.state.draggable;
-    const popupContent = this.state.popupContent;
-    let popup = null;
-    if (this.state.withPopup) {
-      popup = (
-        <Popup>
-          { popupContent }
-        </Popup>
-      );
-    }
+
     markers.push(
       <Marker key={this.state.markers.length} draggable={draggable} pos={pos}>
-        { popup }
       </Marker>
     );
     this.setState({
