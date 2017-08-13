@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Grid, Row, Col } from 'react-bootstrap'
 
-import { Main, Login, About } from '../containers'
+import { Main, Login, About, Registration } from '../containers'
 import { Menu } from '../components'
 import * as mapActions from '../actions/mapAction'
 
@@ -27,6 +27,7 @@ class Routes extends Component {
               <Route exact path="/" render={() => <Main data={map} dispatch={mapActions}/>} />
               <Route path="/login" render={() => <Login />} />
               <Route path="/about" render={() => <About />} />
+              <Route path="/registration" render={() => <Registration />} />
             </Col>
           </Row>
         </Grid>

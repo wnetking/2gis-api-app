@@ -64,13 +64,13 @@ export default class Markers extends Component {
           }
         </Map>
         <ButtonToolbar className="mt-3">
-          <Button bsStyle="primary" onClick={this.showAll} >
+          <Button  onClick={this.showAll} >
             {!data.showAll ?
               'Show all' :
               'Show last'
             }
           </Button>
-          <Button disabled={!data.markers.length}>Save</Button>
+          <Button bsStyle="primary" disabled={!data.markers.length}>Save</Button>
         </ButtonToolbar>
       </div>
     );

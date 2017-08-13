@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import author from '../img/author.jpg';
 import {Jumbotron, Image, Row, Col, Label} from 'react-bootstrap'
 
+
 class About extends Component {
   render() {
     return (

@@ -2,8 +2,11 @@
 
 # dependencies
 /node_modules
+/client/node_modules
 /.history
+/client/.history
 /.code
+/client/.code
 /.idea
 
 # testing
