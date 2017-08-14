@@ -3,6 +3,7 @@ const initialState = {
   center: [46.47995502122337, 30.75759887695313],
   markers: [],
   pos: [46.47995502122337, 30.75759887695313],
+  positions: [],
   draggable: false,
   withPopup: false,
   showAll: false,
@@ -20,7 +21,7 @@ export default function map(state = initialState, action) {
     case 'SHOW_MARKERS':
       return state.map(todo =>
         (todo.id === action.payload.id)
-          ? { ...todo, completed: !todo.completed }
+          ? {...todo, completed: !todo.completed}
           : todo
       )
 

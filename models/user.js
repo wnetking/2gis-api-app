@@ -4,14 +4,13 @@ var mongoose = require('../db'),
   Schema = mongoose.Schema;
 
 var schema = new Schema({
-  username: {
+  email: {
     type: String,
     unique: true,
     required: true
   },
-   email: {
+  username: {
     type: String,
-    unique: true,
     required: true
   },
   hashedPassword: {
@@ -38,7 +37,9 @@ schema.virtual('password')
     this.salt = Math.random() + '';
     this.hashedPassword = this.encryptPassword(password);
   })
-  .get(function () { return this._plainPassword; });
+  .get(function () {
+    return this._plainPassword;
+  });
 
 
 schema.methods.checkPassword = function (password) {

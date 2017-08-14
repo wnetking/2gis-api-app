@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { Grid, Row, Col } from 'react-bootstrap'
+import React, {Component} from 'react';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {Grid, Row, Col} from 'react-bootstrap'
 
-import { Main, Login, About, Registration } from '../containers'
-import { Menu } from '../components'
+import {Main, Login, About, Registration} from '../containers'
+import {Menu, Info, Logout} from '../components'
 import * as mapActions from '../actions/mapAction'
+import * as authActions from '../actions/authAction'
 
 class Routes extends Component {
   constructor() {
@@ -14,20 +15,25 @@ class Routes extends Component {
   }
 
   render() {
-    let { map, auth, mapActions } = this.props;
+    let {map, auth, mapActions, authActions} = this.props;
 
     return (
       <Router>
         <Grid>
           <Row className="show-grid">
             <Col xs={12}>
-              <Menu />
+              <Menu auth={auth} dispatch={mapActions}/>
             </Col>
             <Col xs={12}>
-              <Route exact path="/" render={() => <Main data={map} dispatch={mapActions}/>} />
-              <Route path="/login" render={() => <Login />} />
-              <Route path="/about" render={() => <About />} />
-              <Route path="/registration" render={() => <Registration />} />
+              {auth.message.show ?
+                <Info auth={auth}/>
+                : ''
+              }
+              <Route exact path="/" render={() => <Main data={map} auth={auth} dispatch={mapActions}/>}/>
+              <Route path="/login" render={() => <Login auth={auth} dispatch={authActions}/>}/>
+              <Route path="/about" render={() => <About />}/>
+              <Route path="/logout" render={() => <Logout auth={auth} dispatch={authActions} />}/>
+              <Route path="/registration" render={() => <Registration auth={auth} dispatch={authActions}/>}/>
             </Col>
           </Row>
         </Grid>
@@ -44,10 +50,10 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    mapActions: bindActionCreators(mapActions, dispatch)
+    mapActions: bindActionCreators(mapActions, dispatch),
+    authActions: bindActionCreators(authActions, dispatch),
   }
 }
-
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routes);

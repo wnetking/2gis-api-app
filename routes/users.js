@@ -4,28 +4,116 @@ var db = require('../db')
 var User = require('../models/user').User
 
 router.post('/:action', function (req, res, next) {
+
   switch (req.params.action) {
     case 'login':
-      console.log(req.body)
+      logIn(req.body, (err, message) => {
+        res.json(message);
+      }, (user) => {
+        req.session.user = user._id;
+
+        res.json(user);
+      })
       break;
     case 'registration':
-      var user = new User(req.body);
-      var userPromise = user.save();
-      
-      userPromise.then(function (user) {
-        User.findOne({ username: req.body.username }, function (err, user) {
-          console.log(user);
-          res.json(user);
-        });
-      })
+      registration(req.body,
+        (error) => {
+          res.json(error);
+        },
+        (user, message) => {
+          res.json(message);
+        }
+      )
       break;
   }
 });
 
-router.post('/', function (req, res, next) {
-  console.log(req.body)
-  res.json(req.body);
-});
+function registration(data, err, callback) {
+  var user = new User(data);
+  var userPromise = user.save();
+
+  userPromise.catch((error)=> {
+    err({
+      message: {
+        'type': 'error',
+        show: true,
+        text: error.errmsg
+      }
+    })
+  });
+
+  userPromise.then(function () {
+    User.findOne({'email': data.email}, function (error, user) {
+      if (error) return err({
+        message: {
+          'type': 'error',
+          show: true,
+          text: error.errmsg
+        }
+      });
+
+      callback(user, {
+        login: true,
+        user: {
+          name: user.username,
+          email: user.email
+        },
+        message: {
+          'type': 'info',
+          show: true,
+          text: `Welcome ${user.username}`
+        }
+      });
+    })
+  })
+}
+
+function logIn(data, err, callback) {
+  var user = User.findOne({email: data.email}, (error, user)=> {
+    if (error || user === null) return err(err, {
+      login: false,
+      message: {
+        type: 'error',
+        show: true,
+        text: 'Wrong email'
+      }
+    });
+
+    if (user.checkPassword(data.password)) {
+      callback({
+        login: true,
+        user: {
+          name: user.username,
+          email: user.email
+        },
+        message: {
+          type: 'info',
+          show: true,
+          text: `Welcome ${user.username}`
+        }
+      })
+    } else {
+      err(null, {
+        login: false,
+        message: {
+          type: 'error',
+          show: true,
+          text: 'Wrong password'
+        }
+      })
+    }
+  });
+  user.catch((error)=> {
+    err(error, {
+      login: false,
+      message: {
+        'type': 'error',
+        show: true,
+        text: error.errmsg
+      }
+    })
+  })
+}
 
 module.exports = router;
 
