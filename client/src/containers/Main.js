@@ -113,7 +113,7 @@ export default class Markers extends Component {
 
     return (
       <div>
-        <Map onClick={this.onClick} style={{ width: "100%", height: "700px" }} center={data.center} zoom={data.zoom} fullscreenControl={false}>
+        <Map onClick={this.onClick} style={{ width: "100%", height: "400px" }} center={data.center} zoom={data.zoom} fullscreenControl={false}>
           {data.showAll ?
             data.markers :
             lastMarker

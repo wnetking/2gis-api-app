@@ -22,7 +22,7 @@ class Routes extends Component {
             </Col>
             <Col xs={12}>
               {auth.message.show ?
-                <Info auth={auth}/>
+                <Info auth={auth} dispatch={authActions}/>
                 : ''
               }
               <Route exact path="/" render={() => <Main data={map} auth={auth} authActions={authActions} dispatch={mapActions}/>}/>

@@ -47,7 +47,7 @@ function registration(data, err, callback) {
   userPromise.catch((error)=> {
     err({
       message: {
-        'type': 'error',
+        'type': 'danger',
         show: true,
         text: error.errmsg
       }
@@ -58,7 +58,7 @@ function registration(data, err, callback) {
     User.findOne({'email': data.email}, function (error, user) {
       if (error) return err({
         message: {
-          'type': 'error',
+          'type': 'danger',
           show: true,
           text: error.errmsg
         }
