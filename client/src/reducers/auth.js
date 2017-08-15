@@ -2,7 +2,8 @@ const initialState = {
   login: localStorage.getItem('user') ? true : false,
   user: {
     name: localStorage.getItem('user') || 'Anonim',
-    email: localStorage.getItem('email') || 'anonim@anonim.com'
+    email: localStorage.getItem('email') || 'anonim@anonim.com',
+    positions:[]
   },
   message: {
     type: 'info',
@@ -30,7 +31,7 @@ export default function auth(state = initialState, action) {
       }
 
     case 'UPDATE_DATA':
-      
+
       return {
         ...state,
         ...action.payload

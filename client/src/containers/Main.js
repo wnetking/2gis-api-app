@@ -16,21 +16,34 @@ export default class Markers extends Component {
   }
 
   saveMarkers = () => {
-    let {data, auth} = this.props;
-    fetch('/map/save-markers', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: "POST",
-      body: JSON.stringify({
-        'positions': data.positions,
-        'user': auth.user.name
-      })
-    }).then(res => res.json()
-    ).then(item => {
-      console.log(item)
-    });
+    let {data, auth, authActions} = this.props;
+
+    if (auth.user.name === 'Anonim') {
+      authActions.updateDataAction({
+        login: false,
+        message: {
+          type: 'danger',
+          show: true,
+          text: 'Sorry, you cant save markers. Please login.'
+        }
+      });
+    } else {
+      fetch('/user/save-markers', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          'positions': data.positions,
+          'username': auth.user.name
+        })
+      }).then(res => res.json()
+      ).then(item => {
+        console.log(item);
+        authActions.updateDataAction(item);
+      });
+    }
   }
 
 
@@ -42,13 +55,12 @@ export default class Markers extends Component {
     })
   }
 
-
   addMarker = (pos) => {
     let {data, dispatch} = this.props;
 
     dispatch.saveMarkersAction({
       markers: Array.prototype.concat(data.markers,
-        <Marker key={Math.floor(Math.random() * 10000)} draggable={data.draggable} pos={pos}>
+        <Marker key={Math.floor(Math.random() * 100000)} draggable={data.draggable} pos={pos}>
         </Marker>
       ),
       positions: Array.prototype.concat(data.positions, [pos])
@@ -56,7 +68,7 @@ export default class Markers extends Component {
   }
 
   componentDidMount() {
-    let {data, dispatch} = this.props;
+    let {data, dispatch, authActions} = this.props;
 
     navigator.geolocation.getCurrentPosition((pos) => {
       if (pos.coords === undefined) {
@@ -69,15 +81,39 @@ export default class Markers extends Component {
         this.addMarker([pos.coords.latitude, pos.coords.longitude]);
       }
     })
+
+    if (localStorage.getItem('user')) {
+      fetch('/user/get-positions', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          username: localStorage.getItem('user')
+        })
+      })
+        .then(res => res.json())
+        .then(item => {
+          authActions.updateDataAction(item);
+
+          if (item.user.positions.length > 0) {
+            item.user.positions.forEach((pos)=> {
+              this.addMarker(pos);
+            })
+          }
+        });
+    }
   }
 
 
   render() {
     let {data} = this.props
     let lastMarker = data.markers[data.markers.length - 1]
+
     return (
       <div>
-        <Map onClick={this.onClick} style={{ width: "100%", height: "400px" }} center={data.center} zoom={data.zoom}>
+        <Map onClick={this.onClick} style={{ width: "100%", height: "700px" }} center={data.center} zoom={data.zoom} fullscreenControl={false}>
           {data.showAll ?
             data.markers :
             lastMarker

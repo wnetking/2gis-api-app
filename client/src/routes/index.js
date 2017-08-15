@@ -10,10 +10,6 @@ import * as mapActions from '../actions/mapAction'
 import * as authActions from '../actions/authAction'
 
 class Routes extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     let {map, auth, mapActions, authActions} = this.props;
 
@@ -29,11 +25,11 @@ class Routes extends Component {
                 <Info auth={auth}/>
                 : ''
               }
-              <Route exact path="/" render={() => <Main data={map} auth={auth} dispatch={mapActions}/>}/>
+              <Route exact path="/" render={() => <Main data={map} auth={auth} authActions={authActions} dispatch={mapActions}/>}/>
               <Route path="/login" render={() => <Login auth={auth} dispatch={authActions}/>}/>
               <Route path="/about" render={() => <About />}/>
               <Route path="/logout" render={() => <Logout auth={auth} dispatch={authActions} />}/>
-              <Route path="/registration" render={() => <Registration auth={auth} dispatch={authActions}/>}/>
+              <Route path="/registration" render={() => <Registration data={map} auth={auth} dispatch={authActions}/>}/>
             </Col>
           </Row>
         </Grid>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 class Logout extends Component {
   componentDidMount() {
@@ -8,7 +8,8 @@ class Logout extends Component {
       login: false,
       user: {
         name: 'Anonim',
-        email: 'anonim@anonim.com'
+        email: 'anonim@anonim.com',
+        positions: []
       },
       message: {
         type: 'info',
@@ -18,6 +19,7 @@ class Logout extends Component {
     })
     localStorage.removeItem('user')
     localStorage.removeItem('email')
+    localStorage.removeItem('positions')
   }
 
   render() {

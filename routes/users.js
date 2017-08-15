@@ -4,23 +4,35 @@ var db = require('../db')
 var User = require('../models/user').User
 
 router.post('/:action', function (req, res, next) {
-
   switch (req.params.action) {
     case 'login':
       logIn(req.body, (err, message) => {
         res.json(message);
       }, (user) => {
-        req.session.user = user._id;
-
         res.json(user);
       })
       break;
     case 'registration':
-      registration(req.body,
-        (error) => {
+      registration(req.body, (error) => {
           res.json(error);
-        },
-        (user, message) => {
+        }, (user, message) => {
+          res.json(message);
+        }
+      )
+      break;
+    case 'get-positions':
+      getPosition(req.body.username, (err)=> {
+          res.json(err);
+        }, (message) => {
+          res.json(message);
+        }
+      )
+      break;
+    case 'save-markers':
+      saveMarkers(req.body, (err)=> {
+          res.json(err);
+        }, (message) => {
+          console.log(message);
           res.json(message);
         }
       )
@@ -56,7 +68,8 @@ function registration(data, err, callback) {
         login: true,
         user: {
           name: user.username,
-          email: user.email
+          email: user.email,
+          positions: user.positions
         },
         message: {
           'type': 'info',
@@ -84,7 +97,8 @@ function logIn(data, err, callback) {
         login: true,
         user: {
           name: user.username,
-          email: user.email
+          email: user.email,
+          positions: user.positions
         },
         message: {
           type: 'info',
@@ -113,6 +127,56 @@ function logIn(data, err, callback) {
       }
     })
   })
+}
+
+function getPosition(username, err, callback) {
+  var user = User.findOne({username: username}, (error, user)=> {
+    if (error || user === null) return err({
+      login: false,
+      message: {
+        type: 'error',
+        show: false,
+        text: 'no positions'
+      }
+    });
+
+    callback({
+      login: true,
+      user: {
+        name: user.username,
+        email: user.email,
+        positions: user.positions
+      },
+      message: {
+        type: 'info',
+        show: true,
+        text: `Welcome ${user.username}`
+      }
+    })
+  })
+}
+
+function saveMarkers(data, err, callback) {
+  var user = User.update({username: data.username},
+    {positions: data.positions},
+    (error, user)=> {
+      if (error || user === null) return err({
+        login: false,
+        message: {
+          type: 'danger',
+          show: true,
+          text: 'Sorry, you cant save markers. Please login.'
+        }
+      });
+
+      callback({
+        message: {
+          type: 'success',
+          show: true,
+          text: `Markers save!`
+        }
+      });
+    });
 }
 
 module.exports = router;

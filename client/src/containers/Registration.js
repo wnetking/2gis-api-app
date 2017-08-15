@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import GoogleLogin from 'react-google-login';
-import {Link} from 'react-router-dom';
-import {Jumbotron, ControlLabel, Form, FormGroup, Col, FormControl, Button, Checkbox} from 'react-bootstrap'
+import {Link, Redirect} from 'react-router-dom';
+import {Jumbotron, ControlLabel, Form, FormGroup, Col, FormControl, Button} from 'react-bootstrap'
 
 class Registration extends Component {
   constructor(props) {
@@ -13,12 +12,13 @@ class Registration extends Component {
   handleSubmit(event) {
     event.preventDefault();
     let d = document;
-    let {dispatch} = this.props;
+    let {dispatch, data} = this.props;
 
-    const data = {
+    const userData = {
       'username': d.getElementById('formHorizontalName').value,
       'email': d.getElementById('formHorizontalEmail').value,
-      'password': d.getElementById('formHorizontalPassword').value
+      'password': d.getElementById('formHorizontalPassword').value,
+      'positions': data.positions
     }
 
     fetch('/user/registration', {
@@ -27,7 +27,7 @@ class Registration extends Component {
         'Content-Type': 'application/json'
       },
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(userData)
     }).then(res => res.json()
     ).then(item => {
       dispatch.updateDataAction(item)
@@ -40,6 +40,14 @@ class Registration extends Component {
   }
 
   render() {
+    let {auth} = this.props;
+
+    if (auth.login) {
+      return (
+        <Redirect to='/'/>
+      )
+    }
+
     return (
       <Jumbotron>
         <h1>Registration</h1>

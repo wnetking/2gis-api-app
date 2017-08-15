@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
-import GoogleLogin from 'react-google-login';
 import {Link, Redirect} from 'react-router-dom';
-import {Jumbotron, ControlLabel, Form, FormGroup, Col, FormControl, Button, Checkbox} from 'react-bootstrap'
+import {Jumbotron, ControlLabel, Form, FormGroup, Col, FormControl, Button} from 'react-bootstrap'
 import '../styles/App.less';
-
-const responseGoogle = (response) => {
-  console.log(response);
-}
 
 class Login extends Component {
   constructor(props) {
@@ -18,11 +13,12 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
     let d = document;
-    let {dispatch, auth} = this.props;
+    let {dispatch} = this.props;
 
     const data = {
       'email': d.getElementById('formHorizontalEmail').value,
-      'password': d.getElementById('formHorizontalPassword').value
+      'password': d.getElementById('formHorizontalPassword').value,
+      'positions': []
     }
 
     fetch('/user/login', {
@@ -84,8 +80,6 @@ class Login extends Component {
               <Button type="submit">
                 Sign in
               </Button>
-              &nbsp;&nbsp;
-              <GoogleLogin clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com" className='btn btn-md btn-default' buttonText="Google Login" onSuccess={responseGoogle} onFailure={responseGoogle}/>
             </Col>
           </FormGroup>
         </Form>

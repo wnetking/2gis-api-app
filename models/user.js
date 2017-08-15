@@ -13,6 +13,10 @@ var schema = new Schema({
     type: String,
     required: true
   },
+  positions: {
+    type: Array
+  },
+
   hashedPassword: {
     type: String,
     required: true
