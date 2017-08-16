@@ -1,10 +1,11 @@
-####**Simple application on Express and React**
+Simple application on Express and React
+-----------------------------------
 
 _You can create markers on the map, register and save these markers so that they will not be lost._
 
-#####**[Demo on heroku](https://desolate-eyrie-14201.herokuapp.com/)**
+#### [Demo on heroku](https://desolate-eyrie-14201.herokuapp.com/)**
 
-#####Use:
+#### Use:
 
 * [http://api.2gis.ru/doc/maps/quickstart/](http://api.2gis.ru/doc/maps/quickstart/)
 * [create-react-app](https://github.com/facebookincubator/create-react-app)
@@ -15,7 +16,7 @@ _You can create markers on the map, register and save these markers so that they
 * [React Router](https://reacttraining.com/react-router/web/example/basic)
 * [React-Bootstrap](https://react-bootstrap.github.io/)
 
-#####Notes
+#### Notes
 
 `Create list with type of objects to be chosen (pharmacies, gas stations, schools,  restaurants) so click on the list item has to draw markers on the map with the closest chosen objects`
 
