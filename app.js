@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+var engine = require('consolidate');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -14,7 +14,8 @@ var map = require('./routes/map');
 var app = express();
 
 
-app.set('views', __dirname + '/client/build'); // general config
+app.set('views', __dirname + '/client/build');
+app.engine('html', engine.mustache);
 app.set('view engine', 'html');
 
 app.use(logger('dev'));
