@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 node ./bin/www"
+    "start": "babel-node ./bin/www",
+    "dev": "PORT=3001 nodemon ./bin/www --exec babel-node"
   },
   "dependencies": {
+    "babel": "^5.8.38",
     "body-parser": "~1.17.1",
     "connect-mongo": "^1.3.2",
     "consolidate": "^0.14.5",
@@ -23,5 +25,8 @@
     "nconf": "^0.8.4",
     "node-sass-chokidar": "0.0.3",
     "serve-favicon": "~2.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

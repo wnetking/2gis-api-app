@@ -1,34 +1,14 @@
-var crypto = require('crypto');
+import crypto from'crypto'
+import mongoose from 'mongoose'
 
-var mongoose = require('../db'),
-  Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
 var schema = new Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  username: {
-    type: String,
-    required: true
-  },
-  positions: {
-    type: Array
-  },
-
-  hashedPassword: {
-    type: String,
-    required: true
-  },
-  salt: {
-    type: String,
-    required: true
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  }
+  email         : {type: String, unique: true, required: true},
+  username      : {type: String, required: true},
+  hashedPassword: {type: String, required: true},
+  salt          : {type: String, required: true},
+  created       : {type: Date, default: Date.now}
 });
 
 schema.methods.encryptPassword = function (password) {
@@ -38,7 +18,7 @@ schema.methods.encryptPassword = function (password) {
 schema.virtual('password')
   .set(function (password) {
     this._plainPassword = password;
-    this.salt = Math.random() + '';
+    this.salt           = Math.random() + '';
     this.hashedPassword = this.encryptPassword(password);
   })
   .get(function () {
@@ -50,4 +30,6 @@ schema.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
-exports.User = mongoose.model('User', schema);
+const User = mongoose.model('User', schema);
+
+export default  User;

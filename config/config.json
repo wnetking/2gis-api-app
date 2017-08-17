@@ -1,9 +1,0 @@
-{
-  "mongoose": {
-    "uri": "mongodb://wnetking:iluxa434343@ds145283.mlab.com:45283/do-it-test",
-    "localUrl": "mongodb://localhost/do-it",
-    "options": {
-      "useMongoClient": true
-    }
-  }
-}

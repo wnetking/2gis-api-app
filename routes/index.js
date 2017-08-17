@@ -1,11 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
+import  express from 'express'
+let router = express.Router();
 
-
-router.get('/*', function (req, res, next) {
-  res.render('index.html');
-})
-
+router.get('/', (req, res) => {
+  res.render('index');
+});
 
 module.exports = router;
