@@ -25,14 +25,18 @@ class App extends Component {
                 <Info auth={auth} dispatch={authActions} />
                 : ''
               }
+              
               <Route exact path="/" render={() => (
-                <Main mapState={mapState}
-                  authActions={authActions} dispatch={mapActions} />
+                <Main
+                  mapState={mapState}
+                  mapActions={mapActions} />
               )} />
+
+
               <Route path="/login" render={() => <Login auth={auth} dispatch={authActions} />} />
               <Route path="/about" render={() => <About />} />
               <Route path="/logout" render={() => <Logout auth={auth} dispatch={authActions} />} />
-              <Route path="/registration" render={() => <Registration  auth={auth} dispatch={authActions} />} />
+              <Route path="/registration" render={() => <Registration auth={auth} dispatch={authActions} />} />
             </Col>
           </Row>
         </Grid>

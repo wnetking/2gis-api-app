@@ -8,7 +8,6 @@ import App from './containers/App';
 
 import './styles/index.less';
 
-
 const store = configureStore();
 
 ReactDOM.render(

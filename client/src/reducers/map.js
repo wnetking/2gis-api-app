@@ -1,6 +1,10 @@
+import { SAVE_MARKERS } from '../constants/'
+
 const initialState = {
-  zoom: 12,
+  zoom: 10,
   center: [46.47995502122337, 30.75759887695313],
+  withPopup: false,
+  showAll: false,
   markers: [
     {
       author: 'Anonim',
@@ -18,26 +22,16 @@ const initialState = {
       clickable: true,
       created: Date.now
     }
-  ],
-  withPopup: false,
-  showAll: false
+  ]
 };
 
 export default function map(state = initialState, action) {
   switch (action.type) {
-    case 'SAVE_MARKERS':
+    case SAVE_MARKERS:
       return {
         ...state,
         ...action.payload
-
       }
-    case 'SHOW_MARKERS':
-      return state.map(todo =>
-        (todo.id === action.payload.id)
-          ? { ...todo, completed: !todo.completed }
-          : todo
-      )
-
     default:
       return state
   }
