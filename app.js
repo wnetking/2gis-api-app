@@ -9,6 +9,7 @@ import engine from 'consolidate';
 import index from './routes/index';
 import api from './routes/api';
 import * as db from './utils/db'
+import * as dbMarker from './utils/markerDbUtils'
 
 db.setUpConnection();
 

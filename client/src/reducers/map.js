@@ -1,33 +1,33 @@
-import { SAVE_MARKERS } from '../constants/'
+import { SAVE_MARKERS, SET_LOCATION, GET_ALL_MARKERS, GET_ALL_MARKERS_FETCH } from '../constants/'
 
 const initialState = {
-  zoom: 10,
-  center: [46.47995502122337, 30.75759887695313],
+  fetching: false,
+  isLoadFromServer: false,
+  zoom: 8,
+  center: [46.8, 32.07],
   withPopup: false,
   showAll: false,
-  markers: [
-    {
-      author: 'Anonim',
-      pos: [46.47995502122337, 30.75759887695313],
-      label: 'Hello world!',
-      draggable: false,
-      clickable: true,
-      created: Date.now
-    },
-    {
-      author: 'Anonim-1',
-      pos: [46.5, 30.9],
-      label: 'Hello world!',
-      draggable: false,
-      clickable: true,
-      created: Date.now
-    }
-  ]
+  markers: []
 };
 
 export default function map(state = initialState, action) {
   switch (action.type) {
     case SAVE_MARKERS:
+      return {
+        ...state,
+        ...action.payload
+      }
+    case SET_LOCATION:
+      return {
+        ...state,
+        ...action.payload
+      }
+    case GET_ALL_MARKERS:
+      return {
+        ...state,
+        ...action.payload
+      }
+    case GET_ALL_MARKERS_FETCH:
       return {
         ...state,
         ...action.payload

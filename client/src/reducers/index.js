@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import map from './map'
-import auth from './auth'
+import user from './user'
 
 export default  combineReducers({
-  map, auth
+  map, user
 })
